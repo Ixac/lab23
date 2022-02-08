@@ -92,6 +92,53 @@ int Unit::attack(Unit &opp){
 	return opp.beAttacked(atk);
 }
 
+int Unit::ultimateAttack(Unit &ene)
+{
+    return ene.beAttacked(atk*2);
+}
+
+Equipment::Equipment(int healthpoint , int attack , int defend)
+{
+	hpmax = healthpoint ;
+	atk = attack ;
+	def = defend ;
+}
+
+vector<int> Equipment::getStat()
+{
+	vector<int> stat;
+
+	stat.push_back(hpmax);
+	stat.push_back(atk);
+	stat.push_back(def);
+	
+	return stat;
+}
+
+void Unit::equip(Equipment *eq)
+{
+	if(equipment != NULL)
+	{
+		vector<int> statO = equipment -> getStat() ;
+		hpmax -= statO[0] ;
+		atk -= statO[1] ;
+		def -= statO[2] ;
+	}
+	
+		vector<int> statN = eq -> getStat() ;
+		hpmax += statN[0] ;
+		atk += statN[1] ;
+		def += statN[2] ;
+		
+		equipment = eq;
+
+		if(hp > hpmax)
+		{
+			hp = hpmax;
+		}
+} 
+
+
 int Unit::heal(){
 	int h = rand()%21 + 10;
 	if(hp + h > hpmax) h = hpmax - hp;
@@ -102,6 +149,11 @@ int Unit::heal(){
 void Unit::guard(){
 	guard_on = true;
 }	
+
+void Unit::dodge(){
+	dodge_on = true;
+}
+
 
 bool Unit::isDead(){
 	if(hp <= 0) return true;
@@ -167,4 +219,6 @@ void playerLose(){
 	cout << "*                                                     *\n";
 	cout << "*******************************************************\n";
 };
+
+
 
